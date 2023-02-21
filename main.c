@@ -8,14 +8,27 @@ int main()
     initList(&l1);
 
 
-    insertToFront(&l,9);
-    insertToFront(&l,9);
-    insertToFront(&l,9);
+    insertToFront(&l,6);
+    insertToFront(&l,4);
+    insertToFront(&l,3);
+    insertToFront(&l,6);
+    insertToFront(&l,4);
 
-    // insertToFront(&l1,4);
+    
+
     insertToFront(&l1,3);
-    insertToFront(&l1,8);
+    insertToFront(&l1,3);
+    insertToFront(&l1,4);
+    insertToFront(&l1,4);
+    insertToFront(&l1,4);
+    insertToFront(&l1,3);
+    insertToFront(&l1,5);
 
+
+
+
+
+    // printf("%d",isZero(l1));
 
     displayReverse(l);
     printf("\n");
@@ -23,13 +36,17 @@ int main()
     printf("\n");
 
 
-    List l2 = addTwoLinkedLists(&l, &l1);
-    displayReverse(l2);
+    // List l2 = addTwoLinkedLists(&l, &l1);
+    // List l3 = substractTwoLinkedLists(&l, &l1);
+    List l4 = multiplyTwoLinkedLists(&l, &l1);
+
+    displayReverse(l4);
     printf("\n");
 
     return 0;
 }
 
-// 9 9 9 
-//   3 8
-// 0 3 7
+// 1 2 2 p
+// 2 0 4 q  
+// 2 4 4
+// 
