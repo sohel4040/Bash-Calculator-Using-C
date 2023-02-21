@@ -1,5 +1,12 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include"linkedlist.h"
+#include"stack.h"
+
+// Addition Done 
+// Substraction Done
+// Multiplication Done
+// Division is pending
 
 int main()
 {
@@ -7,6 +14,17 @@ int main()
     initList(&l);
     initList(&l1);
 
+    // stack s;
+    // char *str;
+    // scanf("%ms",&str);
+    // int size = sizeof(str) / sizeof(char);
+    // printf("%s", str);
+    // initStack(&s, size);
+    // char *postfix = (char *) malloc(sizeof(char)*size);
+
+    // convertInfixToPostfix(&s, str, postfix, size);
+
+    // printExpression(postfix, size);
 
     insertToFront(&l,6);
     insertToFront(&l,4);
@@ -14,9 +32,7 @@ int main()
     insertToFront(&l,6);
     insertToFront(&l,4);
 
-    
-
-    insertToFront(&l1,3);
+    insertToFront(&l1,3); 
     insertToFront(&l1,3);
     insertToFront(&l1,4);
     insertToFront(&l1,4);
@@ -24,15 +40,9 @@ int main()
     insertToFront(&l1,3);
     insertToFront(&l1,5);
 
-
-
-
-
-    // printf("%d",isZero(l1));
-
-    displayReverse(l);
+    // displayReverse(l);
     printf("\n");
-    displayReverse(l1);
+    // displayReverse(l1);
     printf("\n");
 
 
@@ -40,13 +50,8 @@ int main()
     // List l3 = substractTwoLinkedLists(&l, &l1);
     List l4 = multiplyTwoLinkedLists(&l, &l1);
 
-    displayReverse(l4);
+    // displayReverse(l4);
     printf("\n");
 
     return 0;
 }
-
-// 1 2 2 p
-// 2 0 4 q  
-// 2 4 4
-// 
