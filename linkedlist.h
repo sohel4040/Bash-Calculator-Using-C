@@ -11,6 +11,8 @@ void insertToFront(List *l, int d);
 void append(List *l, int d);
 int length(List l);
 int isZero(List l);
+int compare(List l1, List l2);
+List divideTwoLinkedLists(List *l1, List *l2);
 List addTwoLinkedLists(List *l1, List *l2);
 List substractTwoLinkedLists(List *l1, List *l2);
 List multiplyTwoLinkedLists(List *l1, List *l2);

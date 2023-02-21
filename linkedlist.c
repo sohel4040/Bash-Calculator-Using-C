@@ -8,6 +8,20 @@ void initList(List *l)
     return;
 }
 
+int length(List l)
+{
+    node *temp = l;
+
+    int count = 0;
+    while(temp)
+    {
+        count++;
+        temp = temp -> next;
+    }
+
+    return count;
+}
+
 void insertToFront(List *l, int digit)
 {
     node *nn = (node*) malloc(sizeof(node));
@@ -67,6 +81,39 @@ int isZero(List l)
     return length(l) == zero;
 
 }
+
+
+int compare(List l1, List l2)
+{
+    int p = length(*l1);
+    int q = length(*l1);
+
+     if(q > p)
+         return 0;
+
+    node *first = *l1;
+    node *second = *l2;
+
+    if(p == q)
+    {
+        while(first && second)
+        {
+            if(second -> data > first -> data)
+                return 0;
+
+            first = first -> next;
+            second = second -> next;
+
+        }
+    }
+    return 1;
+}
+
+// 3 4 5 
+// 3 4 6
+
+// 5 4 3 
+// 6 4 3
 
 // All test cases passed
 List addTwoLinkedLists(List *l1, List *l2)
@@ -243,6 +290,41 @@ List multiplyTwoLinkedLists(List *l1 , List *l2)
     return result;
 }
 
+List divideTwoLinkedLists(List *l1, List *l2)
+{
+     if (!(*l1))
+        return *l2;
+
+    if(!(*l2))
+        return *l1;
+
+    if(isZero(*l2))
+        return NULL;
+
+    List result, one;
+    initList(&result);
+    initList(&one);
+    append(&result, 0);
+    append(&one, 1);
+
+    if(isZero(*l1))
+    {
+        append(&result, 0);
+        return result;
+    }
+
+    node *temp = *l2;
+
+    while(compare(*l1,temp))
+    {
+        temp = multiplyTwoLinkedLists(l2, &result);
+        result = addTwoLinkedLists(&result, &one);
+    }
+
+    return result;
+
+}
+
 
 void displayList(List l)
 {
@@ -269,16 +351,4 @@ void displayReverse(node *l)
     printf("%d",l->data);
 }
 
-int length(List l)
-{
-    node *temp = l;
 
-    int count = 0;
-    while(temp)
-    {
-        count++;
-        temp = temp -> next;
-    }
-
-    return count;
-}

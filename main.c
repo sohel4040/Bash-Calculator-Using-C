@@ -8,6 +8,21 @@
 // Multiplication Done
 // Division is pending
 
+int len(char str[])
+{
+    char ch = str[0];
+    int count = 0;
+    int i = 0;
+    while(ch != '\0')
+    {
+        count++;
+        i++;
+        ch = str[i];
+    }
+
+    return count;
+}
+
 int main()
 {
     List l,l1;
@@ -15,10 +30,9 @@ int main()
     initList(&l1);
 
     // stack s;
-    // char *str;
-    // scanf("%ms",&str);
-    // int size = sizeof(str) / sizeof(char);
-    // printf("%s", str);
+    // char str[4000];
+    // scanf("%s",str);
+    // int size = len(str);
     // initStack(&s, size);
     // char *postfix = (char *) malloc(sizeof(char)*size);
 
@@ -28,29 +42,30 @@ int main()
 
     insertToFront(&l,6);
     insertToFront(&l,4);
-    insertToFront(&l,3);
-    insertToFront(&l,6);
-    insertToFront(&l,4);
+    // insertToFront(&l,3);
+    // insertToFront(&l,6);
+    // insertToFront(&l,4);
 
-    insertToFront(&l1,3); 
-    insertToFront(&l1,3);
-    insertToFront(&l1,4);
-    insertToFront(&l1,4);
-    insertToFront(&l1,4);
-    insertToFront(&l1,3);
-    insertToFront(&l1,5);
+    insertToFront(&l1,2); 
+    // insertToFront(&l1,3);
+    // insertToFront(&l1,4);
+    // insertToFront(&l1,4);
+    // insertToFront(&l1,4);
+    // insertToFront(&l1,3);
+    // insertToFront(&l1,5);
 
-    // displayReverse(l);
+    displayReverse(l);
     printf("\n");
-    // displayReverse(l1);
+    displayReverse(l1);
     printf("\n");
 
 
     // List l2 = addTwoLinkedLists(&l, &l1);
     // List l3 = substractTwoLinkedLists(&l, &l1);
-    List l4 = multiplyTwoLinkedLists(&l, &l1);
+    // List l4 = multiplyTwoLinkedLists(&l, &l1);
+    List l5 = divideTwoLinkedLists(&l, &l1);
 
-    // displayReverse(l4);
+    // displayReverse(l5);
     printf("\n");
 
     return 0;
