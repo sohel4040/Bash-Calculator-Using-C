@@ -82,17 +82,40 @@ int isZero(List l)
 
 }
 
+void reverse(List *l)
+{
+    if(!(*l) || !((*l) -> next))
+        return;
+
+    node *previous = NULL;
+    node *current = *l;
+
+    while(current)
+    {
+        node *temp = current -> next;
+        current -> next = previous;
+        previous = current;
+        current = temp;
+    }
+    *l = previous;
+}
+
 
 int compare(List l1, List l2)
 {
-    int p = length(*l1);
-    int q = length(*l1);
+    // reverse(&l2);
+    // displayList(l1);
+    // displayList(l2);
+
+    int p = length(l1);
+    int q = length(l2);
+
 
      if(q > p)
          return 0;
 
-    node *first = *l1;
-    node *second = *l2;
+    node *first = l1;
+    node *second = l2;
 
     if(p == q)
     {
@@ -100,6 +123,8 @@ int compare(List l1, List l2)
         {
             if(second -> data > first -> data)
                 return 0;
+            else if(first -> data > second -> data)
+                return 1;
 
             first = first -> next;
             second = second -> next;
@@ -290,6 +315,7 @@ List multiplyTwoLinkedLists(List *l1 , List *l2)
     return result;
 }
 
+// Pending ...
 List divideTwoLinkedLists(List *l1, List *l2)
 {
      if (!(*l1))
@@ -315,11 +341,19 @@ List divideTwoLinkedLists(List *l1, List *l2)
 
     node *temp = *l2;
 
-    while(compare(*l1,temp))
+    List temp1 = *l1;
+    reverse(&temp1);
+    reverse(&temp);
+
+    while(compare(temp1,temp))
     {
         temp = multiplyTwoLinkedLists(l2, &result);
         result = addTwoLinkedLists(&result, &one);
+        reverse(&temp);
     }
+
+    result = substractTwoLinkedLists(&result, l2);
+
 
     return result;
 
@@ -332,7 +366,7 @@ void displayList(List l)
 
     while(temp)
     {
-        printf("%d\t",temp->data);
+        printf("%d",temp->data);
         temp = temp -> next;
     }
 
