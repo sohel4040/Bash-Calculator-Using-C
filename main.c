@@ -6,7 +6,7 @@
 // Addition Done 
 // Substraction Done
 // Multiplication Done
-// Division is pending
+// Division Done
 
 int len(char str[])
 {
