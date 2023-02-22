@@ -40,15 +40,15 @@ int main()
 
     // printExpression(postfix, size);
 
-    insertToFront(&l,6);
-    insertToFront(&l,7);
     insertToFront(&l,5);
-    // insertToFront(&l,6);
+    insertToFront(&l,4);
+    insertToFront(&l,5);
+    insertToFront(&l,4);
     // insertToFront(&l,4);
 
-    // insertToFront(&l1,2); 
+    insertToFront(&l1,2); 
     insertToFront(&l1,3);
-    insertToFront(&l1,4);
+    // insertToFront(&l1,4);
     // insertToFront(&l1,4);
     // insertToFront(&l1,4);
     // insertToFront(&l1,3);

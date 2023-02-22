@@ -100,22 +100,37 @@ void reverse(List *l)
     *l = previous;
 }
 
-
 int compare(List l1, List l2)
 {
-    // reverse(&l2);
-    // displayList(l1);
-    // displayList(l2);
+    List temp1, temp2;
+    initList(&temp1);
+    initList(&temp2);
 
-    int p = length(l1);
-    int q = length(l2);
+    node *traverse1, *traverse2;
 
+    traverse1 = l1;
+    traverse2 = l2;
+
+    while(traverse1)
+    {
+        insertToFront(&temp1, traverse1 -> data);
+        traverse1 = traverse1 -> next; 
+    }
+
+    while(traverse2)
+    {
+        insertToFront(&temp2, traverse2 -> data);
+        traverse2 = traverse2 -> next; 
+    }
+
+    int p = length(temp1);
+    int q = length(temp2);
 
      if(q > p)
          return 0;
 
-    node *first = l1;
-    node *second = l2;
+    node *first = temp1;
+    node *second = temp2;
 
     if(p == q)
     {
@@ -134,12 +149,7 @@ int compare(List l1, List l2)
     return 1;
 }
 
-// 3 4 5 
-// 3 4 6
-
-// 5 4 3 
-// 6 4 3
-
+// Addition done
 // All test cases passed
 List addTwoLinkedLists(List *l1, List *l2)
 {
@@ -194,7 +204,7 @@ List addTwoLinkedLists(List *l1, List *l2)
     return result;
 }
 
-// Test cases are remaining 
+// Substraction done
 // Yet to be tested more ...
 List substractTwoLinkedLists(List *l1, List *l2)
 {
@@ -315,7 +325,8 @@ List multiplyTwoLinkedLists(List *l1 , List *l2)
     return result;
 }
 
-// Pending ...
+// Division done
+// Yet to be tested more ...
 List divideTwoLinkedLists(List *l1, List *l2)
 {
      if (!(*l1))
@@ -341,24 +352,16 @@ List divideTwoLinkedLists(List *l1, List *l2)
 
     node *temp = *l2;
 
-    List temp1 = *l1;
-    reverse(&temp1);
-    reverse(&temp);
-
-    while(compare(temp1,temp))
+    while(compare(*l1,temp))
     {
-        temp = multiplyTwoLinkedLists(l2, &result);
         result = addTwoLinkedLists(&result, &one);
-        reverse(&temp);
+        temp = multiplyTwoLinkedLists(l2, &result);
     }
 
-    result = substractTwoLinkedLists(&result, l2);
-
+    result = substractTwoLinkedLists(&result, &one);
 
     return result;
-
 }
-
 
 void displayList(List l)
 {
