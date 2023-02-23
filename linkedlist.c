@@ -221,6 +221,13 @@ List substractTwoLinkedLists(List *l1, List *l2)
     node *p = *l1;
     node *q = *l2;
 
+    // if second number is greater than first number
+    if(!compare(*l1,*l2))
+    {
+        p = *l2;
+        q = *l1;
+    }
+
     while(p && q)
     {
         diff = p -> data - q -> data - borrow;

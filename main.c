@@ -8,20 +8,7 @@
 // Multiplication Done
 // Division Done
 
-int len(char str[])
-{
-    char ch = str[0];
-    int count = 0;
-    int i = 0;
-    while(ch != '\0')
-    {
-        count++;
-        i++;
-        ch = str[i];
-    }
 
-    return count;
-}
 
 int main()
 {
@@ -40,14 +27,14 @@ int main()
 
     // printExpression(postfix, size);
 
-    insertToFront(&l,5);
-    insertToFront(&l,4);
-    insertToFront(&l,5);
-    insertToFront(&l,4);
+    insertToFront(&l,2);
+    insertToFront(&l,3);
+    // insertToFront(&l,5);
+    // insertToFront(&l,4);
     // insertToFront(&l,4);
 
-    insertToFront(&l1,2); 
-    insertToFront(&l1,3);
+    insertToFront(&l1,5); 
+    insertToFront(&l1,4);
     // insertToFront(&l1,4);
     // insertToFront(&l1,4);
     // insertToFront(&l1,4);
