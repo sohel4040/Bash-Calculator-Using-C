@@ -1,10 +1,56 @@
+#include<stdio.h>
+#include"stack.c"
+
+int precedence(char ch)
+{
+    if(ch == '+' || ch == '-')
+        return 1;
+
+    if(ch == '*' || ch == '/')
+        return 2;
+
+    return -1;
+}
+
+int isOperand(char ch)
+{
+    return ch >= '0' && ch <= '9';
+}
+
+int isOperator(char ch)
+{
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+}
+
 void convertInfixToPostfix(stack *s, char *infix, char *postfix, int size)
 {
     int index = 0;
     for(int i=0;i<size;i++)
     {
-        char c = infix[i];
-        
+        char ch = infix[i];
+
+        if(isOperand(ch))
+        {
+            postfix[index++] = ch;              
+        }
+        else if(isOperator(ch))
+        {
+            while(!isEmpty(*s) && precedence(peek(*s)) >= precedence(ch))
+            {
+                postfix[index++] = pop(s);
+            }
+            push(s, ch);
+        }
+        else if(ch == ')')
+        {
+            while(!isEmpty(*s) && !(peek(*s) == '('))
+            {
+                postfix[index++] = pop(s);
+            }
+            pop(s);
+        }
+        else 
+            push(s, ch);
        
     }
     
@@ -51,35 +97,22 @@ int evaluatePostfix(stack *s, char *postfix, int size)
     return eval;
 }
 
+int main()
+{
+    char infix[]="3*3/1+2*(2+1*4/1)";
+    // 2*4+5-3*(2/2*3)/3+5*2-1/2
+    int size = sizeof(infix) / sizeof(char);
+    stack s;
+    initStack(&s,size);
+    char *postfix = (char*) malloc(sizeof(char)*size);
 
-        // char p = peek(*s);
-        // if(((c == '+' || c == '-') && (p == '*' || p == '/' || p == '-' || p == '+') ) || ((c == '*' || c == '/') && (p == '*' || p == '/' ) ))
-        // {
-        //     char n = pop(s);
-        //     p = peek(*s);
-        //     postfix[index++] = n;
+    convertInfixToPostfix(&s, infix, postfix, size);
 
-        //     if(((c == '+' || c == '-') && (p == '*' || p == '/' || p == '-' || p == '+') ) || ((c == '*' || c == '/') && (p == '*' || p == '/' ) ))
-        //     {
-        //         char n = pop(s);
-        //         postfix[index++] = n;
-        //     }
-        //     push(s,c);
-        // }
-        // else if(c == '+' || c == '-' || c == '*' || c == '/' || c == '(')
-        // {
-        //     push(s, c);
-        // }
-        // else if(c >= '0' && c <= '9' )
-        // {
-        //     postfix[index++] = c;
-        // }
-        // if( c == ')')
-        // {
-        //     char p = pop(s);
-        //     while( p != '(' && !isEmpty(*s))
-        //     {
-        //         postfix[index++]=p;
-        //         p = pop(s);
-        //     }
-        // }
+    printExpression(postfix,size);
+
+    printf("\nResult of postfix expression is %d\n",evaluatePostfix(&s,postfix, size-1));
+
+
+
+    return 0;
+}
