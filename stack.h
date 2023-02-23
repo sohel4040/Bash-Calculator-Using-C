@@ -1,6 +1,7 @@
 typedef struct stack
 {
     char *A;
+    // List **numbers;
     int n;
     int top;
 } stack;

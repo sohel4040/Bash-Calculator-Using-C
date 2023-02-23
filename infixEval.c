@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include"stack.h"
+#include"linkedlist.h"
 
 int len(char str[])
 {
@@ -65,13 +66,24 @@ int evaluate(char infix[], int size)
     initStack(&operand, size);
     initStack(&operator, size);
 
-
+    int j = 0;
     for(int i=0; i < size; i++)
     {
-        char ch = infix[i];
+        char ch = infix[j];
 
         if(isOperand(ch))
         {
+            List num;
+            initList(&num); 
+            while(isOperand(ch))
+            {
+                // printf("%c",ch);
+                insertToFront(&num, ch - '0');
+                j++;
+                ch = infix[j];
+            }
+            displayReverse(num);
+            printf("\n");
             push(&operand, ch);
         }
         else if(isOperator(ch))
@@ -87,8 +99,8 @@ int evaluate(char infix[], int size)
                 push(&operand, res + '0');
 
             }
-            
             push(&operator, ch);
+            j++;
         }
         else if(ch == ')')
         {
@@ -103,9 +115,13 @@ int evaluate(char infix[], int size)
 
             }
             pop(&operator);
+            j++;
         }
         else
+        {
             push(&operator, ch);
+            j++;
+        }
     }
 
     while(!isEmpty(operator))
