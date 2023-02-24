@@ -1,6 +1,8 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include"stack.h"
 #include"linkedlist.h"
+#include"number.h"
 
 int len(char str[])
 {
@@ -60,6 +62,19 @@ int eval(char opr, int a , int b)
     return res;
 }
 
+Number* createNumber(char sign, List num)
+{
+    Number* no = (Number*) malloc(sizeof(Number));
+
+    if(!no)
+        return NULL;
+
+    no -> sign = sign;
+    no -> head = &num;
+
+    return no;
+}
+
 int evaluate(char infix[], int size)
 {   
     stack operand, operator;
@@ -74,23 +89,25 @@ int evaluate(char infix[], int size)
         if(isOperand(ch))
         {
             List num;
+            char sign;
             initList(&num); 
 
             if(j==0 || infix[j-1] == '+')
-                printf("+");
+                sign = '+';
             else if(infix[j-1] == '-')
-                printf("-");
+                sign = '-';
             else
-                printf("+");
+                sign = '+';
 
             while(isOperand(ch))
             {
-                // printf("%c",ch);
                 insertToFront(&num, ch - '0');
                 j++;
                 ch = infix[j];
             }
-            displayReverse(num);
+            Number *no = createNumber(sign, num);
+            printf("%c",no -> sign);
+            displayReverse(*(no->head));
             printf("\n");
             push(&operand, ch);
         }

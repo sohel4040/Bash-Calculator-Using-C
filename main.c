@@ -27,14 +27,16 @@ int main()
 
     // printExpression(postfix, size);
 
-    insertToFront(&l,2);
-    insertToFront(&l,3);
+    insertToFront(&l,6);
+    insertToFront(&l,4);
+    insertToFront(&l,6);
+    insertToFront(&l,4);
     // insertToFront(&l,5);
     // insertToFront(&l,4);
     // insertToFront(&l,4);
 
     insertToFront(&l1,5); 
-    insertToFront(&l1,4);
+    // insertToFront(&l1,4);
     // insertToFront(&l1,4);
     // insertToFront(&l1,4);
     // insertToFront(&l1,4);
@@ -50,9 +52,11 @@ int main()
     // List l2 = addTwoLinkedLists(&l, &l1);
     // List l3 = substractTwoLinkedLists(&l, &l1);
     // List l4 = multiplyTwoLinkedLists(&l, &l1);
-    List l5 = divideTwoLinkedLists(&l, &l1);
+    // List l5 = divideTwoLinkedLists(&l, &l1);
+    List l6 = modTwoLinkedLists(&l, &l1);
 
-    displayReverse(l5);
+
+    displayReverse(l6);
     printf("\n");
 
     return 0;

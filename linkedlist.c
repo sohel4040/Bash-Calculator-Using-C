@@ -336,7 +336,7 @@ List multiplyTwoLinkedLists(List *l1 , List *l2)
 // Yet to be tested more ...
 List divideTwoLinkedLists(List *l1, List *l2)
 {
-     if (!(*l1))
+    if (!(*l1))
         return *l2;
 
     if(!(*l2))
@@ -370,6 +370,35 @@ List divideTwoLinkedLists(List *l1, List *l2)
     return result;
 }
 
+// Remainder function works 
+// some extra work need to be done
+List modTwoLinkedLists(List *l1, List *l2)
+{
+    if (!(*l1))
+        return *l2;
+
+    if(!(*l2))
+        return *l1;
+
+    if(isZero(*l2))
+        return NULL;
+
+    List result;
+    initList(&result);
+
+    if(isZero(*l1))
+    {
+        append(&result, 0);
+        return result;
+    }
+
+    List division = divideTwoLinkedLists(l1, l2);
+    List temp = multiplyTwoLinkedLists(l2, &division);
+
+    result = substractTwoLinkedLists(l1, &temp);
+    return result;
+
+}
 void displayList(List l)
 {
     node *temp = l;
