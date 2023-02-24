@@ -4,27 +4,26 @@
 
 typedef struct element
 {
-    // int data;
     List *number;
     struct element * next;    
 } element;
 
-typedef struct stack
+typedef struct NumberStack
 {
     element* top;
-} stack;
+} NumberStack;
 
-void initstack(stack *s)
+void initstack(NumberStack *s)
 {
     s->top = NULL;
 }
 
-int isEmpty(stack s)
+int isEmpty(NumberStack s)
 {
     return (s.top == NULL);
 }
 
-void push(stack *s,List *num)
+void push(NumberStack *s,List *num)
 {
     element* newnode = (element*) malloc(sizeof(element));
 
@@ -45,7 +44,7 @@ void push(stack *s,List *num)
 
 }
 
-List* pop(stack *s)
+List* pop(NumberStack *s)
 {
     if(isEmpty(*s))
     return NULL;
@@ -59,7 +58,7 @@ List* pop(stack *s)
 
 }
 
-List* top(stack s)
+List* top(NumberStack s)
 {   
     return s.top->number;
 }
@@ -75,37 +74,39 @@ List* top(stack s)
 //     }
 //     printf("\n");
 // }
-int main()
-{
-    stack s;
-    initstack(&s);
-    List l1, l2;
-    initList(&l1);
-    initList(&l2);
+
+// int main()
+// {
+//     NumberStack s;
+
+//     initstack(&s);
+//     List l1, l2;
+//     initList(&l1);
+//     initList(&l2);
     
-    insertToFront(&l1, 9);
-    insertToFront(&l1, 5);
+//     insertToFront(&l1, 9);
+//     insertToFront(&l1, 5);
 
-    insertToFront(&l2, 2);
-    insertToFront(&l2, 1);
+//     insertToFront(&l2, 2);
+//     insertToFront(&l2, 1);
 
-    displayReverse(l1);
-    printf("\n");
-    displayReverse(l2);
-    printf("\n");
+//     displayReverse(l1);
+//     printf("\n");
+//     displayReverse(l2);
+//     printf("\n");
 
     
-    push(&s, &l1);
-    push(&s, &l2);
+//     push(&s, &l1);
+//     push(&s, &l2);
 
-    pop(&s);
-    List *l = top(s);
-
-
-    displayReverse(*l);
+//     pop(&s);
+//     List *l = top(s);
 
 
+//     displayReverse(*l);
 
-    return 0;
+
+
+//     return 0;
     
-}
+// }

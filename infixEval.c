@@ -75,6 +75,14 @@ int evaluate(char infix[], int size)
         {
             List num;
             initList(&num); 
+
+            if(j==0 || infix[j-1] == '+')
+                printf("+");
+            else if(infix[j-1] == '-')
+                printf("-");
+            else
+                printf("+");
+
             while(isOperand(ch))
             {
                 // printf("%c",ch);

@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include"stack.c"
 
+// Infix to postfix evaluation pending...
 int precedence(char ch)
 {
     if(ch == '+' || ch == '-')
@@ -31,7 +32,7 @@ void convertInfixToPostfix(stack *s, char *infix, char *postfix, int size)
 
         if(isOperand(ch))
         {
-            postfix[index++] = ch;              
+            postfix[index++] = ch;    
         }
         else if(isOperator(ch))
         {
@@ -58,16 +59,19 @@ void convertInfixToPostfix(stack *s, char *infix, char *postfix, int size)
     {
         postfix[index++] = pop(s);
     }
+    postfix[index] = '\0';
 }
 
 int evaluatePostfix(stack *s, char *postfix, int size)
 {
     int eval=0;
+    printExpression(postfix,size);
+
     for(int i=0;i<size;i++)
     {
         char c = postfix[i];
        
-        if(!(c == '+' || c == '-' || c == '*' || c == '/'))
+        if(isOperand(c))
         {
             push(s,c);
         }
@@ -75,6 +79,9 @@ int evaluatePostfix(stack *s, char *postfix, int size)
         {
             int b = pop(s) - '0';
             int a = pop(s) - '0';
+            // printf("\n %d", a);
+            // printf(" %d\n ", b);
+            // printf("\n%c\n",c);
             switch(c)
             {
                 case '+': 
@@ -84,6 +91,7 @@ int evaluatePostfix(stack *s, char *postfix, int size)
                         eval = a-b;
                         break;
                 case '*':
+                        
                         eval = a*b;
                         break;
                 case '/':
@@ -99,7 +107,8 @@ int evaluatePostfix(stack *s, char *postfix, int size)
 
 int main()
 {
-    char infix[]="3*3/1+2*(2+1*4/1)";
+    char infix[]="3-5*3";
+    // 3*3/1+2*(2+1*4/1)
     // 2*4+5-3*(2/2*3)/3+5*2-1/2
     int size = sizeof(infix) / sizeof(char);
     stack s;
@@ -108,9 +117,7 @@ int main()
 
     convertInfixToPostfix(&s, infix, postfix, size);
 
-    printExpression(postfix,size);
-
-    printf("\nResult of postfix expression is %d\n",evaluatePostfix(&s,postfix, size-1));
+    printf("\nResult of postfix expression is %d\n",evaluatePostfix(&s,postfix, size));
 
 
 
