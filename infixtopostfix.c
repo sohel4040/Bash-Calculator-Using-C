@@ -23,6 +23,7 @@ int isOperator(char ch)
     return ch == '+' || ch == '-' || ch == '*' || ch == '/';
 }
 
+// Infix to postfix conversion works
 void convertInfixToPostfix(stack *s, char *infix, char *postfix, int size)
 {
     int index = 0;
@@ -62,6 +63,7 @@ void convertInfixToPostfix(stack *s, char *infix, char *postfix, int size)
     postfix[index] = '\0';
 }
 
+// need to be checked
 int evaluatePostfix(stack *s, char *postfix, int size)
 {
     int eval=0;
@@ -107,7 +109,7 @@ int evaluatePostfix(stack *s, char *postfix, int size)
 
 int main()
 {
-    char infix[]="3-5*3";
+    char infix[]="2*4+5-3*(2/2*3)/3+5*2-1/2";
     // 3*3/1+2*(2+1*4/1)
     // 2*4+5-3*(2/2*3)/3+5*2-1/2
     int size = sizeof(infix) / sizeof(char);
@@ -119,7 +121,7 @@ int main()
 
     printf("\nResult of postfix expression is %d\n",evaluatePostfix(&s,postfix, size));
 
-
+// 24*5+322/3**3/-52*+12/-
 
     return 0;
 }
