@@ -1,12 +1,16 @@
+typedef struct item 
+{
+    char data;
+    struct item * next;    
+} item;
+
+
 typedef struct stack
 {
-    char *A;
-    // List **numbers;
-    int n;
-    int top;
+    struct item* top;
 } stack;
 
-void initStack(stack *s,int n);
+void initStack(stack *s);
 int isFull(stack s);
 int isEmpty(stack s);
 void push(stack *s,char c);

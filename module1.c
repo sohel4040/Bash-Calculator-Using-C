@@ -1,10 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"linkedlist.c"
+#include"number.h"
 
 typedef struct element
 {
-    List *number;
+    Number *number;
     struct element * next;    
 } element;
 
@@ -13,17 +13,17 @@ typedef struct NumberStack
     element* top;
 } NumberStack;
 
-void initstack(NumberStack *s)
+void initNumber(NumberStack *s)
 {
     s->top = NULL;
 }
 
-int isEmpty(NumberStack s)
+int isNumberStackEmpty(NumberStack s)
 {
     return (s.top == NULL);
 }
 
-void push(NumberStack *s,List *num)
+void pushNumber(NumberStack *s,Number *num)
 {
     element* newnode = (element*) malloc(sizeof(element));
 
@@ -33,7 +33,7 @@ void push(NumberStack *s,List *num)
     newnode->number=num;
     newnode->next = NULL;
 
-    if(isEmpty(*s))
+    if(isNumberStackEmpty(*s))
     {
         s->top = newnode;
         return;
@@ -44,12 +44,12 @@ void push(NumberStack *s,List *num)
 
 }
 
-List* pop(NumberStack *s)
+Number* popNumber(NumberStack *s)
 {
-    if(isEmpty(*s))
+    if(isNumberStackEmpty(*s))
     return NULL;
 
-    List *num = s->top->number;
+    Number *num = s->top->number;
     element * temp = s-> top;
     s->top = s->top->next;
     free(temp);
@@ -58,7 +58,7 @@ List* pop(NumberStack *s)
 
 }
 
-List* top(NumberStack s)
+Number* topNumber(NumberStack s)
 {   
     return s.top->number;
 }

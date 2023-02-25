@@ -1,5 +1,5 @@
 typedef struct Number
 {
     char sign;
-    List *head;
+    List head;
 } Number;
