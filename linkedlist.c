@@ -113,6 +113,32 @@ void reverse(List *l)
     *l = previous;
 }
 
+int checkIfEqual(List l1, List l2)
+{
+    node *p = l1;
+    node *q = l2;
+
+    int len1 = length(l1);
+    int len2 = length(l2);
+
+    if(len1 == len2)
+    {
+        while(p && q)
+        {
+            if(p -> data != q -> data)
+                return 0;
+            
+            p = p -> next;
+            q = q -> next;
+        }
+
+        return 1;
+    }
+    else 
+        return 0;
+
+}
+
 int compare(List l1, List l2)
 {
     List temp1, temp2;
@@ -388,7 +414,10 @@ List divideTwoLinkedLists(List *l1, List *l2)
         return *l1;
 
     if(isZero(*l2))
-        return NULL;
+    {
+        printf("Error : Cannot divide by zero\n");
+        exit(0);
+    }
 
     List result, one;
     initList(&result);
@@ -398,7 +427,6 @@ List divideTwoLinkedLists(List *l1, List *l2)
 
     if(isZero(*l1))
     {
-        append(&result, 0);
         return result;
     }
 
@@ -414,7 +442,7 @@ List divideTwoLinkedLists(List *l1, List *l2)
     return result;
 }
 
-// Division done
+// Division 2nd Approach
 // Yet to be tested more ...
 // List divideTwoLinkedLists(List *l1, List *l2)
 // {
@@ -497,10 +525,18 @@ List modTwoLinkedLists(List *l1, List *l2)
         return result;
     }
 
+    if(checkIfEqual(*l1,*l2))
+    {
+        append(&result, 0);
+        return result;
+    }
+
     if(compare(*l2, *l1))
     {
         return *l1;
     }
+
+
 
 
     List division = divideTwoLinkedLists(l1, l2);
