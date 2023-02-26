@@ -188,6 +188,37 @@ int compare(List l1, List l2)
     return 1;
 }
 
+void removeRedundentZeros(List *l)
+{
+    if(!(*l))
+        return;
+
+    reverse(l);
+
+    node *temp = *l;
+
+    while(temp)
+    {
+        if(temp -> data == 0)
+        {
+            deleteFirst(l);
+        }
+        else
+        {
+            reverse(l);
+            return;
+        }
+
+        temp = *l;
+
+    }
+
+    reverse(l);
+
+
+    return;
+}
+
 // Addition done
 // All test cases passed
 List addTwoLinkedLists(List *l1, List *l2)
@@ -291,7 +322,6 @@ List substractTwoLinkedLists(List *l1, List *l2)
     while(p)
     {
         diff = p -> data - borrow;
-        append(&result, diff);
         if(diff < 0)
         {
             diff += 10;
@@ -301,6 +331,7 @@ List substractTwoLinkedLists(List *l1, List *l2)
         {
             borrow = 0;
         }
+        append(&result, diff);
 
         p = p -> next;
     }
@@ -308,7 +339,6 @@ List substractTwoLinkedLists(List *l1, List *l2)
     while(q)
     {
         diff = q -> data - borrow;
-        append(&result, diff);
         if(diff < 0)
         {
             diff += 10;
@@ -318,6 +348,7 @@ List substractTwoLinkedLists(List *l1, List *l2)
         {
             borrow = 0;
         }
+        append(&result, diff);
 
         q = q -> next;
     }
@@ -415,8 +446,8 @@ List divideTwoLinkedLists(List *l1, List *l2)
 
     if(isZero(*l2))
     {
-        printf("Error : Cannot divide by zero\n");
-        exit(0);
+        printf("Error : Cannot divide by zero");
+        return NULL;
     }
 
     List result, one;

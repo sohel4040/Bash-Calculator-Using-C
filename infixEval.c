@@ -2,7 +2,9 @@
 #include<stdlib.h>
 #include"stack.h"
 #include"linkedlist.h"
-#include"module1.c"
+#include"numberstack.c"
+
+#define MAX_SIZE 5000
 
 int len(char str[])
 {
@@ -27,6 +29,9 @@ int precedence(char ch)
     if(ch == '*' || ch == '/')
         return 2;
 
+    if(ch == '%')
+        return 3;
+
     return -1;
 }
 
@@ -37,7 +42,12 @@ int isOperand(char ch)
 
 int isOperator(char ch)
 {
-    return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%';
+}
+
+int isAlien(char ch)
+{
+    return !(ch >= '0' && ch <= '9' || ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%' || ch == '(' || ch == ')');
 }
 
 Number* eval(char opr, Number* a , Number* b)
@@ -50,6 +60,8 @@ Number* eval(char opr, Number* a , Number* b)
 
     List temp;
     initList(&temp);
+    List first = a -> head;
+    List second = b -> head; 
 
     if(opr == '*' || opr == '/')
     {
@@ -59,34 +71,43 @@ Number* eval(char opr, Number* a , Number* b)
             res -> sign = '+';
 
         if(opr == '*')
+            temp =  multiplyTwoLinkedLists(&first, &second);
+        else
+            temp =  divideTwoLinkedLists(&first, &second);
+    }
+    else if(opr == '%')
+    {
+        if((a -> sign == '-' && b -> sign == '-') || (a -> sign == '+' && b -> sign == '+'))
         {
-            temp =  multiplyTwoLinkedLists(a -> head, b -> head);
+            res -> sign = a -> sign;
         }
         else
         {
-            temp =  divideTwoLinkedLists(a -> head, b -> head);
+                res -> sign = a -> sign;
         }
+        temp = modTwoLinkedLists(&first, &second);
     }
     else
     {
         if((a -> sign == '-' && b -> sign == '-') || (a -> sign == '+' && b -> sign == '+'))
         {
             res -> sign = a -> sign;
-            temp = addTwoLinkedLists(a -> head, b -> head);
+            temp = addTwoLinkedLists(&first, &second);
         }
         else
         {
-            if(compare(*(a -> head), *(b -> head)))
+            if(compare(first, second))
                 res -> sign = a -> sign;
             else
                 res -> sign = b -> sign;
 
-            temp = substractTwoLinkedLists(a -> head, b -> head);
+            temp = substractTwoLinkedLists(&first, &second);
+
         }
      
     }
 
-    res -> head = &temp;
+    res -> head = temp;
 
     return res;
 }
@@ -99,7 +120,7 @@ Number* createNumber(char sign, List num)
         return NULL;
 
     no -> sign = sign;
-    no -> head = &num;
+    no -> head = num;
 
     return no;
 }
@@ -109,12 +130,27 @@ Number* evaluate(char infix[], int size)
     NumberStack operand;
     stack operator;
     initNumber(&operand);
-    initStack(&operator, size);
+    initStack(&operator);
 
     int j = 0;
-    for(int i=0; i < size; i++)
+    while(j < size)
     {
         char ch = infix[j];
+
+        // if(j == size)
+        //     break;
+
+        if(ch == '.')
+        {
+            printf("Numbers should be decimals");
+            return NULL;
+        }
+
+        if(isAlien(ch))
+        {
+            printf("Syntax Error\n");
+            return NULL;
+        }
 
         if(isOperand(ch))
         {
@@ -135,23 +171,25 @@ Number* evaluate(char infix[], int size)
                 j++;
                 ch = infix[j];
             }
-            // Number *no = createNumber(sign, num);
-            // printf("%c",no -> sign);
-            displayReverse(num);
-            printf("\n");
-            // pushNumber(&operand, no);
+            Number *no = createNumber(sign, num);
+
+            pushNumber(&operand, no);
         }
         else if(isOperator(ch))
         {
-            printf("\n%c\n",ch);
+            if((ch == '-' && isOperator(infix[j-1])) || j == 0)
+            {
+                j++;
+                continue;
+            }
             while(!isEmpty(operator) && precedence(peek(operator)) >= precedence(ch))
             {
-                // Number* b = popNumber(&operand);
-                // Number* a = popNumber(&operand);
-                // char op = pop(&operator);
-                // Number* res = eval(op, a, b);
+                Number* b = popNumber(&operand);
+                Number* a = popNumber(&operand);
 
-                // pushNumber(&operand, res);
+                char op = pop(&operator);
+                Number* res = eval(op, a, b);
+                pushNumber(&operand, res);
 
             }
             push(&operator, ch);
@@ -162,11 +200,11 @@ Number* evaluate(char infix[], int size)
 
             while(!isEmpty(operator) && !(peek(operator) == '('))
             {
-                // Number* b = popNumber(&operand);
-                // Number* a = popNumber(&operand);
-                // char op = pop(&operator);
-                // Number* res = eval(op, a, b);
-                // pushNumber(&operand, res);
+                Number* b = popNumber(&operand);
+                Number* a = popNumber(&operand);
+                char op = pop(&operator);
+                Number* res = eval(op, a, b);
+                pushNumber(&operand, res);
 
             }
             pop(&operator);
@@ -181,39 +219,54 @@ Number* evaluate(char infix[], int size)
 
     while(!isEmpty(operator))
     {
-        // Number* b = popNumber(&operand);
-        // Number* a = popNumber(&operand);
-        // char op = pop(&operator);
-        // Number* res = eval(op, a, b);
+        Number* b = popNumber(&operand);
+        Number* a = popNumber(&operand);
+        char op = pop(&operator);
 
-        // pushNumber(&operand, res);
+        Number* res = eval(op, a, b);
+        pushNumber(&operand, res);
+
     }
 
-    return topNumber(operand);
-
+    return popNumber(&operand);
 }
 
 int main()
 {
-    char str[4000];
-    scanf("%s",str);
-    int size = len(str);
+    char str[MAX_SIZE];
+    while(1)
+    {
+        printf("> ");
+        scanf("%s",str);
+        if(str[0] == 'q')
+            break;
+        int size = len(str);
 
-    Number *res = evaluate(str, size);
-    // printf("\n%c",res -> sign);
-    // List temp = *(res -> head);
-    // displayReverse(temp);
-    printf("\n");
+        // int i = 0, j = 0;
 
-    // printExpression(str, size);
-    // printf("%d\n", res);
+        // while (i < size) {
+        //     if (str[i] != ' ') {
+        //         str[j++] = str[i];
+        //     }
+        //     i++;
+        // }
+        // str[j] = '\0';
+// 5 + 6 - 3 * 8 / 4 * 2 + 9 *2
+
+
+        Number* res = evaluate(str, size);
+
+        if(res)
+        {
+            if(res -> sign == '-')
+                printf("%c",res -> sign);
+            // removeRedundentZeros(&(res -> head));
+            displayReverse(res -> head);
+            printf("\n");
+        }
+    
+    }
+
     return 0;
 }
 
-// 1 . if operand encounters then push it into operand stack
-
-// 2 . if operator encounters then push it into operator stack
-//     and check until stack has operators with same and higher priority and pop
-
-// 3 . check stack empty condition also for poping
-// 4 . pop until opern bracket encounters  

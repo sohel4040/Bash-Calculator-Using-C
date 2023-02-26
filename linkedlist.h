@@ -17,6 +17,7 @@ List substractTwoLinkedLists(List *l1, List *l2);
 List multiplyTwoLinkedLists(List *l1, List *l2);
 List divideTwoLinkedLists(List *l1, List *l2);
 List modTwoLinkedLists(List *l1, List *l2);
+void removeRedundentZeros(List *l);
 void displayList(List l);   
 void displayReverse(node *l);
 
