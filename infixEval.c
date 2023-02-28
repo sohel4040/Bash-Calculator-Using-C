@@ -64,6 +64,14 @@ Number* eval(char opr, Number* a , Number* b)
     List first = a -> head;
     List second = b -> head; 
 
+    // printf("First number is : %c", a -> sign);
+    // displayReverse(a -> head);
+    // printf("\n");
+
+    // printf("Second number is : %c", b -> sign);
+    // displayReverse(b -> head);
+    // printf("\n");
+
     if(opr == '*' || opr == '/')
     {
         if((a -> sign == '+' && b -> sign == '-') || (a -> sign == '-' && b -> sign == '+'))
@@ -74,7 +82,10 @@ Number* eval(char opr, Number* a , Number* b)
         if(opr == '*')
             temp =  multiplyTwoLinkedLists(&first, &second);
         else
+        {
             temp =  divideTwoLinkedLists(&first, &second);
+
+        }
     }
     else if(opr == '%')
     {
@@ -185,7 +196,7 @@ Number* evaluate(char infix[], int size)
         }
         else if(isOperator(ch))
         {
-            if(ch == '-' && isOperator(infix[j+1]))
+            if((ch == '-' && isOperator(infix[j+1])) || (ch == '+' && (infix[j+1] == '*' || infix[j+1] == '/')))
             {
                 printf("Syntax Error - Invalid expression\n");
                 return NULL;
@@ -223,10 +234,6 @@ Number* evaluate(char infix[], int size)
 
                 char op = pop(&operator);
                 Number* res = eval(op, a, b);
-
-                // printf("%c", res -> sign);
-                // displayReverse(res -> head);
-                // printf("\n");
                 
                 pushNumber(&operand, res);
             }
@@ -234,7 +241,7 @@ Number* evaluate(char infix[], int size)
             Number *temp = topNumber(operand);
             char tempOpr = peek(operator);
 
-            if(temp -> sign == '-' && tempOpr == '-')
+            if((temp -> sign == '-' && tempOpr == '-'))
             {
                 temp = popNumber(&operand);
                 temp -> sign = '+';
@@ -249,12 +256,30 @@ Number* evaluate(char infix[], int size)
                 temp -> sign = '-';
                 pushNumber(&operand, temp);
             }
+           
             j++;
         }
         else
         {
             if(j == 0)
+            {
+                List num;
+                initList(&num); 
+                insertToFront(&num, 0);
+                Number *no = createNumber('+', num);
+                pushNumber(&operand, no);
+
                 push(&operator, '+');
+            }
+            else if(j == 1 && infix[0] == '-')
+            {
+                List num;
+                initList(&num); 
+                insertToFront(&num, 0);
+                Number *no = createNumber('+', num);
+                pushNumber(&operand, no);
+
+            }
 
             push(&operator, ch);
             j++;
