@@ -107,6 +107,9 @@ Number* eval(char opr, Number* a , Number* b)
         }
      
     }
+    
+    if(!temp)
+        return NULL;
 
     if(!isZero(temp))
         removeRedundentZeros(&temp);
@@ -162,7 +165,6 @@ Number* evaluate(char infix[], int size)
             List num;
             char sign;
             initList(&num); 
-
             if(j==0)
                 sign = '+';
             else if(infix[j-1] == '-' || (infix[j-1] == '+' && infix[j-2] == '-' && j>2))
@@ -176,7 +178,9 @@ Number* evaluate(char infix[], int size)
                 j++;
                 ch = infix[j];
             }
+
             Number *no = createNumber(sign, num);
+         
             pushNumber(&operand, no);
         }
         else if(isOperator(ch))
@@ -186,8 +190,8 @@ Number* evaluate(char infix[], int size)
                 printf("Syntax Error - Invalid expression\n");
                 return NULL;
             }
-       
-            if((ch == '-' && isOperator(infix[j-1])) || j == 0 || (ch == '+' && isOperator(infix[j-1])) || (isOperator(ch) && infix[j-1] == '('))
+           
+            if(!(j == 0 && ch == '-' && infix[j+1] == '(') && ((ch == '-' && isOperator(infix[j-1])) || j == 0 || (ch == '+' && isOperator(infix[j-1])) || (isOperator(ch) && infix[j-1] == '(')))
             {
                 j++;
                 continue;
@@ -195,6 +199,8 @@ Number* evaluate(char infix[], int size)
             while(!isEmpty(operator) && precedence(peek(operator)) >= precedence(ch))
             {
                 Number* b = popNumber(&operand);
+
+               
                 Number* a = popNumber(&operand);
 
                 char op = pop(&operator);
@@ -212,9 +218,16 @@ Number* evaluate(char infix[], int size)
             while(!isEmpty(operator) && !(peek(operator) == '('))
             {
                 Number* b = popNumber(&operand);
+                
                 Number* a = popNumber(&operand);
+
                 char op = pop(&operator);
                 Number* res = eval(op, a, b);
+
+                // printf("%c", res -> sign);
+                // displayReverse(res -> head);
+                // printf("\n");
+                
                 pushNumber(&operand, res);
             }
             pop(&operator);
@@ -240,6 +253,9 @@ Number* evaluate(char infix[], int size)
         }
         else
         {
+            if(j == 0)
+                push(&operator, '+');
+
             push(&operator, ch);
             j++;
         }
@@ -249,7 +265,21 @@ Number* evaluate(char infix[], int size)
     {
         Number* b = popNumber(&operand);
         Number* a = popNumber(&operand);
+
         char op = pop(&operator);
+
+        if(!a)
+        {
+            if(op != -1)
+            {
+                if((b -> sign == '-' && op == '-') || (b -> sign == '-' && op == '+') || (b -> sign == '+' && op == '-'))
+                    b -> sign = '-';
+                else
+                    b -> sign = '+';
+
+            }
+            return b;
+        }
 
         Number* res = eval(op, a, b);
         pushNumber(&operand, res);
@@ -268,7 +298,6 @@ int main()
     {
         printf("> ");
         fgets(str, MAX_SIZE, stdin);
-        // scanf("%s",str);
         if(str[0] == 'q')
             break;
         int size = len(str);
@@ -292,9 +321,6 @@ int main()
         {
             if(res -> sign == '-' && !isZero(res -> head))
                 printf("%c",res -> sign);
-            
-            // if(!isZero(res -> head))
-            //     removeRedundentZeros(&(res -> head));
             
             displayReverse(res -> head);
             printf("\n");

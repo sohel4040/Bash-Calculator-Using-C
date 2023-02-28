@@ -446,7 +446,7 @@ List divideTwoLinkedLists(List *l1, List *l2)
 
     if(isZero(*l2))
     {
-        printf("Runtime Error : Cannot divide by zero");
+        printf("Runtime Error : Cannot divide by zero\n");
         return NULL;
     }
 
