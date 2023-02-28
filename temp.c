@@ -242,3 +242,14 @@ int main()
     // printf("%d\n", res);
     return 0;
 }
+
+
+
+            // if(j==0 || infix[j-1] == '+')
+            //     sign = '+';
+            // else if(infix[j-1] == '-')
+            //     sign = '-';
+            // else
+            //     sign = '+';
+            //  infix[j-1] == '-'
+            // !(infix[j-1] == '-' && infix[j-2] == '-' && j>2) 

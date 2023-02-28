@@ -63,6 +63,14 @@ Number* eval(char opr, Number* a , Number* b)
     List first = a -> head;
     List second = b -> head; 
 
+    // printf("%c", a -> sign);
+    // displayReverse(a -> head);
+    // printf("\n");
+
+    // printf("%c", b -> sign);
+    // displayReverse(b -> head);
+    // printf("\n");
+
     if(opr == '*' || opr == '/')
     {
         if((a -> sign == '+' && b -> sign == '-') || (a -> sign == '-' && b -> sign == '+'))
@@ -107,6 +115,8 @@ Number* eval(char opr, Number* a , Number* b)
      
     }
 
+    if(!isZero(temp))
+        removeRedundentZeros(&temp);
     res -> head = temp;
 
     return res;
@@ -136,9 +146,7 @@ Number* evaluate(char infix[], int size)
     while(j < size)
     {
         char ch = infix[j];
-
-        // if(j == size)
-        //     break;
+        
 
         if(ch == '.')
         {
@@ -158,9 +166,9 @@ Number* evaluate(char infix[], int size)
             char sign;
             initList(&num); 
 
-            if(j==0 || infix[j-1] == '+')
+            if(j==0)
                 sign = '+';
-            else if(infix[j-1] == '-')
+            else if(infix[j-1] == '-' || (infix[j-1] == '+' && infix[j-2] == '-' && j>2))
                 sign = '-';
             else
                 sign = '+';
@@ -172,12 +180,17 @@ Number* evaluate(char infix[], int size)
                 ch = infix[j];
             }
             Number *no = createNumber(sign, num);
-
             pushNumber(&operand, no);
         }
         else if(isOperator(ch))
         {
-            if((ch == '-' && isOperator(infix[j-1])) || j == 0)
+            if(ch == '-' && isOperator(infix[j+1]))
+            {
+                printf("Syntax Error - Invalid expression\n");
+                return NULL;
+            }
+       
+            if((ch == '-' && isOperator(infix[j-1])) || j == 0 || (ch == '+' && isOperator(infix[j-1])) || (isOperator(ch) && infix[j-1] == '('))
             {
                 j++;
                 continue;
@@ -192,6 +205,7 @@ Number* evaluate(char infix[], int size)
                 pushNumber(&operand, res);
 
             }
+          
             push(&operator, ch);
             j++;
         }
@@ -205,9 +219,26 @@ Number* evaluate(char infix[], int size)
                 char op = pop(&operator);
                 Number* res = eval(op, a, b);
                 pushNumber(&operand, res);
-
             }
             pop(&operator);
+            Number *temp = topNumber(operand);
+            char tempOpr = peek(operator);
+
+            if(temp -> sign == '-' && tempOpr == '-')
+            {
+                temp = popNumber(&operand);
+                temp -> sign = '+';
+                tempOpr = pop(&operator);
+                tempOpr = '+';
+                pushNumber(&operand, temp);
+                push(&operator, tempOpr);
+            }
+            else if(temp -> sign == '+' && tempOpr == '-')
+            {
+                temp = popNumber(&operand);
+                temp -> sign = '-';
+                pushNumber(&operand, temp);
+            }
             j++;
         }
         else
@@ -231,9 +262,34 @@ Number* evaluate(char infix[], int size)
     return popNumber(&operand);
 }
 
+void removeAllSpacesFromExpression(char str[], int size)
+{
+    int i = 0, j = 0;
+
+    while (i < size) {
+        if (str[i] != ' ') {
+            str[j++] = str[i];
+        }
+        i++;
+    }
+    str[j] = '\0';
+
+    // printf("%d", len(str));
+
+    int k = 0;
+
+    // while(k < size)
+    // {
+    //     printf("%c",str[k++]);
+    // }
+    // printf("\n");
+}
+
 int main()
 {
     char str[MAX_SIZE];
+    printf("Type q or ctrl+c to exit from calculator...\n");
+
     while(1)
     {
         printf("> ");
@@ -242,28 +298,23 @@ int main()
             break;
         int size = len(str);
 
-        // int i = 0, j = 0;
-
-        // while (i < size) {
-        //     if (str[i] != ' ') {
-        //         str[j++] = str[i];
-        //     }
-        //     i++;
-        // }
-        // str[j] = '\0';
-// 5 + 6 - 3 * 8 / 4 * 2 + 9 *2
-
+        // removeAllSpacesFromExpression(str, size);        
+        // 5 + 6 - 3 * 8 / 4 * 2 + 9 *2
 
         Number* res = evaluate(str, size);
 
         if(res)
         {
-            if(res -> sign == '-')
+            if(res -> sign == '-' && !isZero(res -> head))
                 printf("%c",res -> sign);
-            // removeRedundentZeros(&(res -> head));
+            
+            // if(!isZero(res -> head))
+            //     removeRedundentZeros(&(res -> head));
+            
             displayReverse(res -> head);
             printf("\n");
         }
+       
     
     }
 
