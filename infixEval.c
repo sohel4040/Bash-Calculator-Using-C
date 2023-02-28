@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include"stack.h"
 #include"linkedlist.h"
 #include"numberstack.c"
@@ -63,14 +64,6 @@ Number* eval(char opr, Number* a , Number* b)
     List first = a -> head;
     List second = b -> head; 
 
-    // printf("%c", a -> sign);
-    // displayReverse(a -> head);
-    // printf("\n");
-
-    // printf("%c", b -> sign);
-    // displayReverse(b -> head);
-    // printf("\n");
-
     if(opr == '*' || opr == '/')
     {
         if((a -> sign == '+' && b -> sign == '-') || (a -> sign == '-' && b -> sign == '+'))
@@ -117,6 +110,11 @@ Number* eval(char opr, Number* a , Number* b)
 
     if(!isZero(temp))
         removeRedundentZeros(&temp);
+    else
+    {
+        temp = NULL;
+        append(&temp, 0);
+    }
     res -> head = temp;
 
     return res;
@@ -146,7 +144,6 @@ Number* evaluate(char infix[], int size)
     while(j < size)
     {
         char ch = infix[j];
-        
 
         if(ch == '.')
         {
@@ -262,29 +259,6 @@ Number* evaluate(char infix[], int size)
     return popNumber(&operand);
 }
 
-void removeAllSpacesFromExpression(char str[], int size)
-{
-    int i = 0, j = 0;
-
-    while (i < size) {
-        if (str[i] != ' ') {
-            str[j++] = str[i];
-        }
-        i++;
-    }
-    str[j] = '\0';
-
-    // printf("%d", len(str));
-
-    int k = 0;
-
-    // while(k < size)
-    // {
-    //     printf("%c",str[k++]);
-    // }
-    // printf("\n");
-}
-
 int main()
 {
     char str[MAX_SIZE];
@@ -293,15 +267,26 @@ int main()
     while(1)
     {
         printf("> ");
-        scanf("%s",str);
+        fgets(str, MAX_SIZE, stdin);
+        // scanf("%s",str);
         if(str[0] == 'q')
             break;
         int size = len(str);
 
-        // removeAllSpacesFromExpression(str, size);        
-        // 5 + 6 - 3 * 8 / 4 * 2 + 9 *2
+        int i = 0, j = 0;
 
-        Number* res = evaluate(str, size);
+        while (i < size) {
+            int ch = str[i];
+            if (ch != 32) {
+                str[j++] = str[i];
+            }
+            i++;
+        }
+        str[j] = '\0';
+
+        size = len(str);
+
+        Number* res = evaluate(str, size - 1);
 
         if(res)
         {
