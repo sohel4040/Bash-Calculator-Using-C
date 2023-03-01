@@ -64,14 +64,6 @@ Number* eval(char opr, Number* a , Number* b)
     List first = a -> head;
     List second = b -> head; 
 
-    // printf("First number is : %c", a -> sign);
-    // displayReverse(a -> head);
-    // printf("\n");
-
-    // printf("Second number is : %c", b -> sign);
-    // displayReverse(b -> head);
-    // printf("\n");
-
     if(opr == '*' || opr == '/')
     {
         if((a -> sign == '+' && b -> sign == '-') || (a -> sign == '-' && b -> sign == '+'))
@@ -82,22 +74,15 @@ Number* eval(char opr, Number* a , Number* b)
         if(opr == '*')
             temp =  multiplyTwoLinkedLists(&first, &second);
         else
-        {
-            // temp =  divideTwoLinkedLists(&first, &second);
-            temp = divide(&first, &second);
+            temp = divideTwoLinkedLists(&first, &second);
 
-        }
     }
     else if(opr == '%')
     {
         if((a -> sign == '-' && b -> sign == '-') || (a -> sign == '+' && b -> sign == '+'))
-        {
             res -> sign = a -> sign;
-        }
         else
-        {
-                res -> sign = a -> sign;
-        }
+            res -> sign = a -> sign;
         temp = modTwoLinkedLists(&first, &second);
     }
     else
@@ -203,7 +188,7 @@ Number* evaluate(char infix[], int size)
                 return NULL;
             }
            
-            if(!(j == 0 && ch == '-' && infix[j+1] == '(') && ((ch == '-' && isOperator(infix[j-1])) || j == 0 || (ch == '+' && isOperator(infix[j-1])) || (isOperator(ch) && infix[j-1] == '(')))
+            if(!(j == 0 && (ch == '-' || ch == '+') && infix[j+1] == '(') && ((ch == '-' && isOperator(infix[j-1])) || j == 0 || (ch == '+' && isOperator(infix[j-1])) || (isOperator(ch) && infix[j-1] == '(')))
             {
                 j++;
                 continue;
@@ -272,7 +257,7 @@ Number* evaluate(char infix[], int size)
 
                 push(&operator, '+');
             }
-            else if(j == 1 && infix[0] == '-')
+            else if(j == 1 && (infix[0] == '-' || infix[0] == '+'))
             {
                 List num;
                 initList(&num); 

@@ -219,8 +219,6 @@ void removeRedundentZeros(List *l)
     return;
 }
 
-// Addition done
-// All test cases passed
 List addTwoLinkedLists(List *l1, List *l2)
 {
     if (!(*l1))
@@ -274,8 +272,6 @@ List addTwoLinkedLists(List *l1, List *l2)
     return result;
 }
 
-// Substraction done
-// Yet to be tested more ...
 List substractTwoLinkedLists(List *l1, List *l2)
 {
     if (!(*l1))
@@ -291,7 +287,6 @@ List substractTwoLinkedLists(List *l1, List *l2)
     node *p = *l1;
     node *q = *l2;
 
-    // if second number is greater than first number
     if(!compare(*l1,*l2))
     {
         p = *l2;
@@ -356,8 +351,6 @@ List substractTwoLinkedLists(List *l1, List *l2)
     return result;
 }
 
-// Multiplication done
-// Yet to be tested more ...
 List multiplyTwoLinkedLists(List *l1 , List *l2)
 {
     if (!(*l1))
@@ -402,6 +395,7 @@ List multiplyTwoLinkedLists(List *l1 , List *l2)
     return result;
 }
 
+
 int compareTwoNumbers(List l1, List l2)
 {
 
@@ -439,7 +433,8 @@ int compareTwoNumbers(List l1, List l2)
     return 1;
 }
 
-List divideTwoLinkedLists(List *l1, List *l2)
+// It performs small numbers division
+List divideDigits(List *l1, List *l2)
 {
     if (!(*l1))
         return *l2;
@@ -475,9 +470,8 @@ List divideTwoLinkedLists(List *l1, List *l2)
     return result;
 }
 
-// Division 2nd Approach
-// Yet to be tested more ...
-List divide(List *l1, List *l2)
+// Return the quotient linkedlist of two numbers after division
+List divideTwoLinkedLists(List *l1, List *l2)
 {
     if (!(*l1))
         return *l2;
@@ -498,32 +492,20 @@ List divide(List *l1, List *l2)
     reverse(&first);
     reverse(&second);
 
-    // displayList(first);
-    // displayList(second);
-    
     append(&temp, first -> data);
-    // first = first -> next;
-
-    // printf("----------\n");
 
     while(first)
     {
-        // displayList(first);
-        // printf("\n");
-
         if(compareTwoNumbers(second, temp))
         {
             insertToFront(&quotient, 0);
         }
         else
         {
-            // displayList(temp);
-            // displayList(second);
-
             reverse(&temp);
             reverse(&second);
             
-            List division = divideTwoLinkedLists(&temp, &second);
+            List division = divideDigits(&temp, &second);
             insertToFront(&quotient, division -> data);
 
 
@@ -543,23 +525,13 @@ List divide(List *l1, List *l2)
             int data = first -> data;
             append(&temp, data);
         }
-
-        // displayList(temp);
-        // printf("\n");
     }
-    // printf("Temp list is: ");
-    // displayReverse(quotient);
-    // printf("\n");
 
     return quotient;
    
 }
 
-// // 2244
-// // 23
-
-// // Remainder function works 
-// // some extra work need to be done
+// It will perform division of two numbers and returns the remainder linkedlist.
 List modTwoLinkedLists(List *l1, List *l2)
 {
     if (!(*l1))
@@ -571,34 +543,60 @@ List modTwoLinkedLists(List *l1, List *l2)
     if(isZero(*l2))
         return NULL;
 
-    List result;
-    initList(&result);
+    List temp, first, second, traverse;
+    initList(&temp);
+    first = *l1;
+    second = *l2;
+    traverse = first;
 
-    if(isZero(*l1))
+    reverse(&first);
+    reverse(&second);
+
+    append(&temp, first -> data);
+
+    while(first)
     {
-        append(&result, 0);
-        return result;
+        if(!compareTwoNumbers(second, temp))
+        {
+            reverse(&temp);
+            reverse(&second);
+            
+            List division = divideDigits(&temp, &second);
+            List mul = multiplyTwoLinkedLists(&second, &division);
+
+            temp = substractTwoLinkedLists(&temp, &mul);
+            removeRedundentZeros(&temp);
+
+            reverse(&temp);
+            reverse(&second);
+
+        }
+        first = first -> next;
+
+        if(first)
+        {
+            int data = first -> data;
+            append(&temp, data);
+        }
     }
 
-    if(checkIfEqual(*l1,*l2))
-    {
-        append(&result, 0);
-        return result;
-    }
+    if(!temp)
+        append(&temp , 0);
 
-    if(compare(*l2, *l1))
-    {
-        return *l1;
-    }
+    reverse(&temp);
 
-
-    List division = divideTwoLinkedLists(l1, l2);
-    List temp = multiplyTwoLinkedLists(l2, &division);
-
-    result = substractTwoLinkedLists(l1, &temp);
-    return result;
+    return temp;
 
 }
+
+// List power(List *l1, List *l2)
+// {
+
+
+
+
+//     return NULL;
+// }
 
 void displayList(List l)
 {
