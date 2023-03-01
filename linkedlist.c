@@ -411,6 +411,8 @@ int compareTwoNumbers(List l1, List l2)
     if(!l2)
         return 1;
 
+    if(checkIfEqual(l1, l2))
+        return 0;
     int p = length(l1);
     int q = length(l2);
 
@@ -436,6 +438,7 @@ int compareTwoNumbers(List l1, List l2)
     }
     return 1;
 }
+
 List divideTwoLinkedLists(List *l1, List *l2)
 {
     if (!(*l1))
@@ -469,73 +472,94 @@ List divideTwoLinkedLists(List *l1, List *l2)
         temp = addTwoLinkedLists(&temp, l2);
     }
 
-
     return result;
 }
 
 // Division 2nd Approach
 // Yet to be tested more ...
-// List divideTwoLinkedLists(List *l1, List *l2)
-// {
-//     if (!(*l1))
-//         return *l2;
+List divide(List *l1, List *l2)
+{
+    if (!(*l1))
+        return *l2;
 
-//     if(!(*l2))
-//         return *l1;
+    if(!(*l2))
+        return *l1;
 
-//     if(isZero(*l2))
-//         return NULL;
+    if(isZero(*l2))
+        return NULL;
 
-//     List temp,quotient,first,second, traverse ;
-//     initList(&quotient);
-//     initList(&temp);
-//     first = *l1;
-//     second = *l2;
-//     traverse = first;
+    List temp,quotient,first,second, traverse ;
+    initList(&quotient);
+    initList(&temp);
+    first = *l1;
+    second = *l2;
+    traverse = first;
 
-//     reverse(&first);
-//     reverse(&second);
+    reverse(&first);
+    reverse(&second);
 
-//     // isplayList(first);
-//     // displayList(second);d
+    // displayList(first);
+    // displayList(second);
+    
+    append(&temp, first -> data);
+    // first = first -> next;
 
-//     append(&temp, first -> data);
-//     // first = first -> next;
+    // printf("----------\n");
 
-//     while(first)
-//     {
-//         if(compareTwoNumbers(second, temp))
-//         {
-//             insertToFront(&quotient, 0);
-//         }
-//         else
-//         {
-//             reverse(&temp);
-//             reverse(&second);
+    while(first)
+    {
+        // displayList(first);
+        // printf("\n");
+
+        if(compareTwoNumbers(second, temp))
+        {
+            insertToFront(&quotient, 0);
+        }
+        else
+        {
+            // displayList(temp);
+            // displayList(second);
+
+            reverse(&temp);
+            reverse(&second);
             
-//             List division = divideDigits(&temp, &second);
-//             insertToFront(&quotient, division -> data);
+            List division = divideTwoLinkedLists(&temp, &second);
+            insertToFront(&quotient, division -> data);
 
-//             List mul = multiplyTwoLinkedLists(&second, &division);
 
-//             temp = substractTwoLinkedLists(&temp, &mul);
-//             reverse(&temp);
-//             reverse(&second);
+            List mul = multiplyTwoLinkedLists(&second, &division);
 
-//         }
-//         int data = first -> data;
-//         append(&temp, data);
-//         // displayList(temp);
-//         // printf("\n");
-//         first = first -> next;
-//     }
+            temp = substractTwoLinkedLists(&temp, &mul);
+            removeRedundentZeros(&temp);
 
-//     return quotient;
+            reverse(&temp);
+            reverse(&second);
+
+        }
+        first = first -> next;
+
+        if(first)
+        {
+            int data = first -> data;
+            append(&temp, data);
+        }
+
+        // displayList(temp);
+        // printf("\n");
+    }
+    // printf("Temp list is: ");
+    // displayReverse(quotient);
+    // printf("\n");
+
+    return quotient;
    
-// }
+}
 
-// Remainder function works 
-// some extra work need to be done
+// // 2244
+// // 23
+
+// // Remainder function works 
+// // some extra work need to be done
 List modTwoLinkedLists(List *l1, List *l2)
 {
     if (!(*l1))
@@ -568,8 +592,6 @@ List modTwoLinkedLists(List *l1, List *l2)
     }
 
 
-
-
     List division = divideTwoLinkedLists(l1, l2);
     List temp = multiplyTwoLinkedLists(l2, &division);
 
@@ -577,6 +599,7 @@ List modTwoLinkedLists(List *l1, List *l2)
     return result;
 
 }
+
 void displayList(List l)
 {
     node *temp = l;
@@ -601,5 +624,4 @@ void displayReverse(node *l)
     displayReverse(l->next);
     printf("%d",l->data);
 }
-
 

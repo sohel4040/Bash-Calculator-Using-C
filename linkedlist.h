@@ -20,4 +20,5 @@ List modTwoLinkedLists(List *l1, List *l2);
 void removeRedundentZeros(List *l);
 void displayList(List l);   
 void displayReverse(node *l);
+List divide(List *l1, List *l2);
 

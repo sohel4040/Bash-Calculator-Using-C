@@ -83,7 +83,8 @@ Number* eval(char opr, Number* a , Number* b)
             temp =  multiplyTwoLinkedLists(&first, &second);
         else
         {
-            temp =  divideTwoLinkedLists(&first, &second);
+            // temp =  divideTwoLinkedLists(&first, &second);
+            temp = divide(&first, &second);
 
         }
     }
