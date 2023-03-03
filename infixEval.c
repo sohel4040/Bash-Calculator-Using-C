@@ -83,6 +83,7 @@ Number* eval(char opr, Number* a , Number* b)
             res -> sign = a -> sign;
         else
             res -> sign = a -> sign;
+            
         temp = modTwoLinkedLists(&first, &second);
     }
     else
@@ -147,7 +148,7 @@ Number* evaluate(char infix[], int size)
 
         if(ch == '.')
         {
-            printf("Numbers should be decimals");
+            printf("Numbers should be integers");
             return NULL;
         }
 
@@ -197,7 +198,6 @@ Number* evaluate(char infix[], int size)
             {
                 Number* b = popNumber(&operand);
 
-               
                 Number* a = popNumber(&operand);
 
                 char op = pop(&operator);
@@ -343,3 +343,4 @@ int main()
     return 0;
 }
 
+// 4504125/3

@@ -443,10 +443,8 @@ List divideDigits(List *l1, List *l2)
         return *l1;
 
     if(isZero(*l2))
-    {
-        printf("Runtime Error : Cannot divide by zero\n");
         return NULL;
-    }
+    
 
     List result, one;
     initList(&result);
@@ -458,6 +456,9 @@ List divideDigits(List *l1, List *l2)
     {
         return result;
     }
+    removeRedundentZeros(l1);
+    removeRedundentZeros(l2);
+
 
     node *temp = *l2;
 
@@ -466,6 +467,7 @@ List divideDigits(List *l1, List *l2)
         result = addTwoLinkedLists(&result, &one);
         temp = addTwoLinkedLists(&temp, l2);
     }
+
 
     return result;
 }
@@ -479,8 +481,14 @@ List divideTwoLinkedLists(List *l1, List *l2)
     if(!(*l2))
         return *l1;
 
+    if(isZero(*l1))
+        return *l1;
+
     if(isZero(*l2))
+    {
+        printf("Runtime Error : Cannot divide by zero\n");
         return NULL;
+    }
 
     List temp,quotient,first,second, traverse ;
     initList(&quotient);
@@ -589,14 +597,22 @@ List modTwoLinkedLists(List *l1, List *l2)
 
 }
 
-// List power(List *l1, List *l2)
-// {
+List power(List *l1, List *l2)
+{
 
+    List result, one = NULL;
+    initList(&result);
+    append(&result, 1);
+    append(&one, 1);
 
+    while(!isZero(*l2))
+    {
+        result = multiplyTwoLinkedLists(&result, l1);
+        *l2 = substractTwoLinkedLists(l2, &one);
+    }
 
-
-//     return NULL;
-// }
+    return result;
+}
 
 void displayList(List l)
 {

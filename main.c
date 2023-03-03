@@ -10,37 +10,11 @@ int main()
     initList(&l2);
 
     insertToFront(&l1, 3);
-    insertToFront(&l1, 9);
-    insertToFront(&l1, 4);
-    insertToFront(&l1, 4);
-    insertToFront(&l1, 4);
-    insertToFront(&l1, 4);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
-    insertToFront(&l1, 1);
 
-
-
-    insertToFront(&l2, 3);
+    insertToFront(&l2, 8);
     // insertToFront(&l2, 3);
+    // insertToFront(&l2, 3);
+
 
     displayReverse(l1);
     printf("\n");
@@ -48,7 +22,7 @@ int main()
     displayReverse(l2);
     printf("\n");
 
-    List result = divide(&l1, &l2);
+    List result = power(&l1, &l2);
 
     displayReverse(result);
     printf("\n");
