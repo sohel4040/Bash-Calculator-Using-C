@@ -490,6 +490,9 @@ List divideTwoLinkedLists(List *l1, List *l2)
         return NULL;
     }
 
+    removeRedundentZeros(l1);
+    removeRedundentZeros(l2);
+
     List temp,quotient,first,second, traverse ;
     initList(&quotient);
     initList(&temp);
