@@ -602,19 +602,31 @@ List modTwoLinkedLists(List *l1, List *l2)
 
 List power(List *l1, List *l2)
 {
-
-    List result, one = NULL;
-    initList(&result);
-    append(&result, 1);
-    append(&one, 1);
-
-    while(!isZero(*l2))
+    if(isZero(*l2))
     {
-        result = multiplyTwoLinkedLists(&result, l1);
-        *l2 = substractTwoLinkedLists(l2, &one);
+        List one;
+        initList(&one);
+        append(&one, 1);
+        return one;
     }
+    List two;
+    initList(&two);
+    append(&two, 2);
 
-    return result;
+    List division = divideTwoLinkedLists(l2, &two);
+
+    List temp = power(l1, &division);
+
+    List mod = modTwoLinkedLists(l2, &two);
+
+    List mul = multiplyTwoLinkedLists(&temp , &temp);
+    
+    if(isZero(mod))
+        return mul;
+    
+    mul = multiplyTwoLinkedLists(&mul, l1);
+
+    return mul; 
 }
 
 void displayList(List l)
@@ -642,3 +654,108 @@ void displayReverse(node *l)
     printf("%d",l->data);
 }
 
+
+
+void displayNumber(List num, int count)
+{
+    int i = 0;
+    reverse(&num);
+    node* temp = num;
+
+    if(isZero(num))
+    {
+        printf("0");
+        return;
+    }
+
+    if(count == 0)
+        printf("0.");
+
+    while(temp)
+    {
+        if(i == count && count != 0)
+            printf(".");
+        printf("%d",temp->data);
+        temp = temp -> next;
+        i++;
+    }
+
+    reverse(&num);
+    return;
+}
+
+List trimLinkedList(List l1, int count)
+{
+    List result;
+    initList(&result);
+
+    reverse(&l1);
+
+    List temp = l1;
+    int i = 0;
+    
+    while(temp)
+    {
+        if(i == count)
+        {
+            reverse(&result);
+            return result;
+        }
+
+        append(&result, temp -> data);
+
+        temp = temp -> next;
+        i++;
+    }
+
+    reverse(&result);
+    return result;
+}
+
+void truncateDecimalPointDigits(List *num, int afterDecimal, int needToTruncate)
+{
+    if(!*num)
+        return;
+
+
+    int trunc = afterDecimal - needToTruncate;
+
+    while(trunc > 0)
+    {
+        deleteFirst(num);
+        trunc--;
+    }
+
+}
+
+int checkIfNumberIsTendsToZero(List l, int count)
+{
+    if(!l)
+        return -1;
+
+
+    List temp = NULL;
+
+    node* traverse = l;
+    
+    while(traverse)
+    {
+        insertToFront(&temp, traverse -> data);
+        traverse = traverse -> next;
+    }
+    
+    int i = 1;
+
+    while(temp)
+    {
+        if(temp -> data != 0 && i <=count)
+        {
+            reverse(&temp);
+            return 0;
+        }
+        i++;
+        temp = temp -> next;
+    }
+
+    return 1;
+}
