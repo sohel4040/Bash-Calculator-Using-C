@@ -105,9 +105,7 @@ Number* eval(char opr, Number* a , Number* b)
 
             int needToTruncate = afterDecimal1 >= afterDecimal2 ? afterDecimal1 : afterDecimal2; 
             truncateDecimalPointDigits(&temp,afterDecimal3, needToTruncate);
-
             res -> count = length(temp) - needToTruncate;
-
         }
         else
         {
@@ -117,8 +115,6 @@ Number* eval(char opr, Number* a , Number* b)
                 initList(&num);
                 append(&num, 0);
                 temp = num;
-
-                
             }
             else 
             {
@@ -132,9 +128,6 @@ Number* eval(char opr, Number* a , Number* b)
                 res -> count = length(temp);
 
             }
-
-
-
         }
 
     }
@@ -214,7 +207,6 @@ Number* eval(char opr, Number* a , Number* b)
             res -> head = temp;
             return res;
     }
-
 
     if(!isZero(temp))
     {
@@ -462,7 +454,6 @@ int main()
             if(res -> sign == '-' && !isZero(res -> head))
                 printf("%c",res -> sign);
             
-            // displayReverse(res -> head);
             displayNumber(res -> head, res -> count);
             printf("\n");
         }
@@ -473,4 +464,3 @@ int main()
     return 0;
 }
 
-// 4504125/3
