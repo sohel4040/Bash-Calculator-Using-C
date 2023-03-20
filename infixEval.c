@@ -30,8 +30,8 @@ int precedence(char ch)
     if(ch == '*' || ch == '/' || ch == '%')
         return 2;
 
-    // if(ch == '%')
-    //     return 3;
+    if(ch == '^')
+        return 3;
 
     return -1;
 }
@@ -43,12 +43,21 @@ int isOperand(char ch)
 
 int isOperator(char ch)
 {
-    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%';
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%' || ch == '^';
 }
 
 int isAlien(char ch)
 {
-    return !(ch >= '0' && ch <= '9' || ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%' || ch == '(' || ch == ')');
+    return !(isOperand(ch) || isOperator(ch) || ch == '(' || ch == ')' || ch == '.');
+}
+
+void appendZeros(List *num, int count)
+{
+    int i = 0;
+    while(i < count)
+    {
+        append(num, 0);
+    }
 }
 
 Number* eval(char opr, Number* a , Number* b)
@@ -64,6 +73,24 @@ Number* eval(char opr, Number* a , Number* b)
     List first = a -> head;
     List second = b -> head; 
 
+    int count1 = length(first);
+    int count2 = length(second);
+
+    int afterDecimal1 = count1 - a -> count;
+    int afterDecimal2 = count2 - b -> count;
+
+    while(afterDecimal1 > afterDecimal2)
+    {   
+            insertToFront(&second, 0);
+            afterDecimal2++;
+    }
+
+    while(afterDecimal2 > afterDecimal1)
+    {
+            insertToFront(&first, 0);
+            afterDecimal1++;
+    }
+
     if(opr == '*' || opr == '/')
     {
         if((a -> sign == '+' && b -> sign == '-') || (a -> sign == '-' && b -> sign == '+'))
@@ -72,9 +99,43 @@ Number* eval(char opr, Number* a , Number* b)
             res -> sign = '+';
 
         if(opr == '*')
+        {
             temp =  multiplyTwoLinkedLists(&first, &second);
+            int afterDecimal3 = length(temp) - (length(temp) - (afterDecimal1 + afterDecimal2));
+
+            int needToTruncate = afterDecimal1 >= afterDecimal2 ? afterDecimal1 : afterDecimal2; 
+            truncateDecimalPointDigits(&temp,afterDecimal3, needToTruncate);
+
+            res -> count = length(temp) - needToTruncate;
+
+        }
         else
-            temp = divideTwoLinkedLists(&first, &second);
+        {
+            if(a -> count < b -> count)
+            {
+                List num;
+                initList(&num);
+                append(&num, 0);
+                temp = num;
+
+                
+            }
+            else 
+            {
+                if(afterDecimal1 < afterDecimal2)
+                    appendZeros(&first, afterDecimal2 - afterDecimal1);
+                else
+                    appendZeros(&second, afterDecimal1 - afterDecimal2);
+                
+                temp = divideTwoLinkedLists(&first, &second);
+
+                res -> count = length(temp);
+
+            }
+
+
+
+        }
 
     }
     else if(opr == '%')
@@ -86,12 +147,46 @@ Number* eval(char opr, Number* a , Number* b)
             
         temp = modTwoLinkedLists(&first, &second);
     }
+    else if(opr == '^')
+    {
+        if(b -> sign == '-'&& b -> count == length(b -> head))
+        {
+            List num;
+            initList(&num);
+            append(&num, 0);
+            temp = num;
+            res -> sign = '+';
+        }
+        else if(b -> count < count2)
+        {
+            printf("Runtime warning\n");
+            temp = NULL;
+        }
+        else if(isZero(second))
+        {
+            List num;
+            initList(&num);
+            append(&num, 1);
+            temp = num;
+            res -> sign = '+';
+        }
+        else
+        {
+
+            res -> sign = '+';
+            temp = power(&first, &second);
+            res -> count = length(temp);
+        }
+            
+    }
     else
     {
         if((a -> sign == '-' && b -> sign == '-') || (a -> sign == '+' && b -> sign == '+'))
         {
             res -> sign = a -> sign;
             temp = addTwoLinkedLists(&first, &second);
+            res -> count = length(temp) - afterDecimal1;
+
         }
         else
         {
@@ -101,16 +196,30 @@ Number* eval(char opr, Number* a , Number* b)
                 res -> sign = b -> sign;
 
             temp = substractTwoLinkedLists(&first, &second);
-
+            
+            if(!isZero(temp))
+                removeRedundentZeros(&temp);
+            
+            res -> count = b -> count;
+        
         }
      
     }
-    
+
     if(!temp)
         return NULL;
 
+    if(checkIfNumberIsTendsToZero(temp, res -> count))
+    {
+            res -> head = temp;
+            return res;
+    }
+
+
     if(!isZero(temp))
+    {
         removeRedundentZeros(&temp);
+    }
     else
     {
         temp = NULL;
@@ -121,7 +230,7 @@ Number* eval(char opr, Number* a , Number* b)
     return res;
 }
 
-Number* createNumber(char sign, List num)
+Number* createNumber(char sign, int count, List num)
 {
     Number* no = (Number*) malloc(sizeof(Number));
 
@@ -129,6 +238,7 @@ Number* createNumber(char sign, List num)
         return NULL;
 
     no -> sign = sign;
+    no -> count = count;
     no -> head = num;
 
     return no;
@@ -146,12 +256,6 @@ Number* evaluate(char infix[], int size)
     {
         char ch = infix[j];
 
-        if(ch == '.')
-        {
-            printf("Numbers should be integers");
-            return NULL;
-        }
-
         if(isAlien(ch))
         {
             printf("Syntax Error\n");
@@ -160,6 +264,7 @@ Number* evaluate(char infix[], int size)
 
         if(isOperand(ch))
         {
+            int i = 0,count = 0, flag = 0;
             List num;
             char sign;
             initList(&num); 
@@ -170,14 +275,31 @@ Number* evaluate(char infix[], int size)
             else
                 sign = '+';
 
-            while(isOperand(ch))
+            if(infix[j-1] == '.')
+                flag = 1;
+
+            while(isOperand(ch) || ch == '.')
             {
-                insertToFront(&num, ch - '0');
+                if(ch == '.')
+                {
+                    count = i;
+                }
+                else 
+                {
+                    i++;
+                    insertToFront(&num, ch - '0');
+                }
                 j++;
                 ch = infix[j];
             }
+            if(count == 0)
+            {
+                count = i;
+            }
+            if(flag == 1)
+                count = 0;
 
-            Number *no = createNumber(sign, num);
+            Number *no = createNumber(sign, count, num);
          
             pushNumber(&operand, no);
         }
@@ -211,7 +333,11 @@ Number* evaluate(char infix[], int size)
         }
         else if(ch == ')')
         {
-
+            if(isEmpty(operator))
+            {
+                printf("Syntax Error");
+                return NULL;
+            }
             while(!isEmpty(operator) && !(peek(operator) == '('))
             {
                 Number* b = popNumber(&operand);
@@ -252,7 +378,7 @@ Number* evaluate(char infix[], int size)
                 List num;
                 initList(&num); 
                 insertToFront(&num, 0);
-                Number *no = createNumber('+', num);
+                Number *no = createNumber('+',1, num);
                 pushNumber(&operand, no);
 
                 push(&operator, '+');
@@ -262,7 +388,7 @@ Number* evaluate(char infix[], int size)
                 List num;
                 initList(&num); 
                 insertToFront(&num, 0);
-                Number *no = createNumber('+', num);
+                Number *no = createNumber('+',1, num);
                 pushNumber(&operand, no);
 
             }
@@ -303,6 +429,9 @@ Number* evaluate(char infix[], int size)
 int main()
 {
     char str[MAX_SIZE];
+    printf("DSA-I Project : Binary Calculator\n");
+    printf("Name : Sohel Shamshuddin Bargir\nMIS : 142203002\n");
+    printf("-------------------------------------------\n");
     printf("Type q or ctrl+c to exit from calculator...\n");
 
     while(1)
@@ -333,7 +462,8 @@ int main()
             if(res -> sign == '-' && !isZero(res -> head))
                 printf("%c",res -> sign);
             
-            displayReverse(res -> head);
+            // displayReverse(res -> head);
+            displayNumber(res -> head, res -> count);
             printf("\n");
         }
        
